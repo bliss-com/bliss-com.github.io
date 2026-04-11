@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UI Clone</title>
+<title>bliss bot</title>
 
 <style>
 * {
@@ -89,24 +89,6 @@ body {
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-}
-
-/* glow scan line */
-.card::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 40px;
-    height: 100%;
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        rgba(0,255,150,0.2),
-        transparent
-    );
-    transform: translateX(-50%);
-    animation: scan 4s linear infinite;
 }
 
 @keyframes scan {
