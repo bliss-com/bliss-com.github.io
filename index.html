@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UI Clone</title>
+<title>Bliss Bot</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 body {
@@ -31,7 +31,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-/* AVATAR */
 .avatar-wrap {
     position: relative;
     width: 56px;
@@ -83,7 +82,19 @@ body {
 .progress-bar { position:absolute; bottom:0; left:0; height:2px; width:99.9%; background:linear-gradient(90deg,#00ff9c11,#00ff9c66,#00ff9c11); border-radius:0 0 18px 18px; }
 
 .menu { display:flex; flex-direction:column; gap:4px; width:100%; max-width:660px; }
-.menu-item { padding:14px 20px; border-radius:14px; display:flex; align-items:center; justify-content:space-between; background:transparent; border:1px solid transparent; cursor:pointer; transition:all 0.2s ease; -webkit-tap-highlight-color:transparent; }
+.menu-item {
+    padding:14px 20px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:transparent;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:all 0.2s ease;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+}
 .menu-item:hover, .menu-item.active { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); }
 .left { display:flex; align-items:center; gap:16px; }
 .icon { width:38px; height:38px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; transition:background 0.2s; }
@@ -103,8 +114,9 @@ body {
     .card { padding:14px 16px; gap:12px; }
     .card-name { font-size:16px; }
     .menu-item { padding:13px 16px; }
+    /* On mobile subtitles + arrows always visible */
     .item-sub { max-height:20px !important; color:#666 !important; }
-    .arrow { opacity:0.6 !important; transform:translateX(0) !important; }
+    .arrow { opacity:0.5 !important; transform:translateX(0) !important; }
 }
 </style>
 </head>
@@ -128,7 +140,7 @@ body {
 
     <div class="card-info">
         <div class="card-meta">NODE_ID</div>
-        <div class="card-name">Bliss</div>
+        <div class="card-name">Kayo</div>
         <div class="card-status"><span class="dot"></span>ONLINE</div>
     </div>
     <div class="card-right">
@@ -139,38 +151,40 @@ body {
 </div>
 
 <div class="menu">
-    <div class="menu-item active" onclick="go('commands.html')">
+    <div class="menu-item" data-href="commands.html">
         <div class="left"><div class="icon">&gt;_</div><div class="item-text"><span class="item-name">Commands</span><span class="item-sub">Browse all bot commands</span></div></div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" onclick="go('studio.html')">
+    <div class="menu-item" data-href="studio.html">
         <div class="left"><div class="icon">🎨</div><div class="item-text"><span class="item-name">Studio</span><span class="item-sub">Create &amp; customize</span></div></div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" onclick="go('dashboard.html')">
+    <div class="menu-item" data-href="dashboard.html">
         <div class="left"><div class="icon">▦</div><div class="item-text"><span class="item-name">Dashboard</span><span class="item-sub">Manage your server</span></div></div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" onclick="go('avatars.html')">
+    <div class="menu-item" data-href="avatars.html">
         <div class="left"><div class="icon">👥</div><div class="item-text"><span class="item-name">Avatars</span><span class="item-sub">Browse user avatars</span></div></div>
         <div class="arrow">→</div>
     </div>
-   
-    <div class="menu-item" onclick="go('docs.html')">
+    <div class="menu-item" data-href="casino.html">
+        <div class="left"><div class="icon">🎰</div><div class="item-text"><span class="item-name">Casino</span><span class="item-sub">Play &amp; earn coins</span></div></div>
+        <div class="arrow">→</div>
+    </div>
+    <div class="menu-item" data-href="docs.html">
         <div class="left"><div class="icon">📖</div><div class="item-text"><span class="item-name">Docs</span><span class="item-sub">Read the documentation</span></div></div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" onclick="go('purchase.html')">
+    <div class="menu-item" data-href="purchase.html">
         <div class="left"><div class="icon">🛒</div><div class="item-text"><span class="item-name">Purchase</span><span class="item-sub">Buy Kayo for your server</span></div></div>
         <div class="arrow">→</div>
     </div>
 </div>
 
-<div class="hint">Double tap to select</div>
+<div class="hint" id="hint">Double tap to select</div>
 
 <script>
-function go(page) { window.location.href = page; }
-
+// Avatar picker
 document.getElementById('avatarInput').addEventListener('change', function() {
     const file = this.files[0];
     if (!file) return;
@@ -178,12 +192,65 @@ document.getElementById('avatarInput').addEventListener('change', function() {
     document.getElementById('avatarEl').innerHTML = '<img src="' + url + '" alt="avatar">';
 });
 
-const items = document.querySelectorAll('.menu-item');
-let current = 0;
+const items = Array.from(document.querySelectorAll('.menu-item'));
+const hint = document.getElementById('hint');
+let selected = -1; // nothing selected by default
+
+function isMobile() {
+    return window.matchMedia('(max-width:480px)').matches || ('ontouchstart' in window);
+}
+
+function setSelected(idx) {
+    items.forEach((el, i) => el.classList.toggle('active', i === idx));
+    selected = idx;
+}
+
+function clearSelected() {
+    items.forEach(el => el.classList.remove('active'));
+    selected = -1;
+}
+
+// Desktop: hover moves selection, click navigates
+if (!isMobile()) {
+    items.forEach((item, i) => {
+        item.addEventListener('mouseenter', () => setSelected(i));
+        item.addEventListener('mouseleave', () => clearSelected());
+        item.addEventListener('click', () => {
+            window.location.href = item.dataset.href;
+        });
+    });
+} else {
+    // Mobile: 1st tap = select (show desc), 2nd tap on same item = navigate
+    hint.textContent = 'Tap once to preview · Tap again to open';
+    items.forEach((item, i) => {
+        item.addEventListener('click', () => {
+            if (selected === i) {
+                // already selected — go
+                window.location.href = item.dataset.href;
+            } else {
+                // first tap — just select
+                setSelected(i);
+            }
+        });
+    });
+
+    // Tap outside clears selection
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.menu-item')) clearSelected();
+    });
+}
+
+// Keyboard nav (works on both)
 document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowDown') { items[current].classList.remove('active'); current=(current+1)%items.length; items[current].classList.add('active'); }
-    else if (e.key === 'ArrowUp') { items[current].classList.remove('active'); current=(current-1+items.length)%items.length; items[current].classList.add('active'); }
-    else if (e.key === 'Enter') { items[current].click(); }
+    if (e.key === 'ArrowDown') {
+        const next = selected < items.length - 1 ? selected + 1 : 0;
+        setSelected(next);
+    } else if (e.key === 'ArrowUp') {
+        const prev = selected > 0 ? selected - 1 : items.length - 1;
+        setSelected(prev);
+    } else if (e.key === 'Enter' && selected >= 0) {
+        window.location.href = items[selected].dataset.href;
+    }
 });
 </script>
 </body>
