@@ -3,68 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bliss Bot</title>
+<title>Bliss-Bot</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+
 body {
     background: radial-gradient(circle at 30% 20%, #0c0f14, #05070a 60%, #000);
     color: #cfcfcf;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 40px 20px;
+    padding: 40px 20px 80px;
+    overflow-x: hidden;
 }
+
+/* ── CARD ── */
 .card {
-    width: 100%;
-    max-width: 660px;
-    border-radius: 18px;
-    padding: 16px 20px;
+    width: 100%; max-width: 660px;
+    border-radius: 18px; padding: 16px 20px;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
     backdrop-filter: blur(20px);
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 8px;
-    position: relative;
-    overflow: hidden;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 8px; position: relative; overflow: hidden;
 }
 .avatar-wrap {
-    position: relative;
-    width: 56px;
-    height: 56px;
-    flex-shrink: 0;
-    cursor: pointer;
+    position: relative; width: 56px; height: 56px;
+    flex-shrink: 0; cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 }
 .avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+    width: 56px; height: 56px; border-radius: 12px;
     background: radial-gradient(circle at 40% 35%, #1e2a3a, #0a0c12);
     box-shadow: 0 0 18px rgba(0,150,255,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transition: box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; transition: box-shadow 0.2s;
 }
 .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
 .avatar svg { width:36px; height:36px; opacity:0.85; }
 .avatar-overlay {
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
+    position: absolute; inset: 0; border-radius: 12px;
     background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s;
-    font-size: 16px;
-    pointer-events: none;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s; font-size: 16px; pointer-events: none;
 }
 .avatar-wrap:hover .avatar-overlay,
 .avatar-wrap:active .avatar-overlay { opacity: 1; }
@@ -81,47 +64,187 @@ body {
 .card-uptime { font-size:13px; color:#00ff9c; font-family:'Courier New',monospace; font-weight:600; }
 .progress-bar { position:absolute; bottom:0; left:0; height:2px; width:99.9%; background:linear-gradient(90deg,#00ff9c11,#00ff9c66,#00ff9c11); border-radius:0 0 18px 18px; }
 
+/* ── MENU ── */
 .menu { display:flex; flex-direction:column; gap:4px; width:100%; max-width:660px; }
+
 .menu-item {
-    padding:14px 20px;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:transparent;
-    border:1px solid transparent;
-    cursor:pointer;
-    transition:all 0.2s ease;
-    -webkit-tap-highlight-color:transparent;
-    user-select:none;
+    padding: 14px 20px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: transparent; border: 1px solid transparent;
+    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
+    -webkit-tap-highlight-color: transparent; user-select: none;
+    position: relative; overflow: hidden;
 }
-.menu-item:hover, .menu-item.active { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); }
+.menu-item:hover, .menu-item.active {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.08);
+}
+
 .left { display:flex; align-items:center; gap:16px; }
-.icon { width:38px; height:38px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; transition:background 0.2s; }
-.menu-item:hover .icon, .menu-item.active .icon { background:rgba(255,255,255,0.1); }
-.item-text { display:flex; flex-direction:column; gap:1px; }
-.item-name { font-size:15px; color:#bbb; font-weight:500; transition:color 0.2s; }
-.menu-item:hover .item-name, .menu-item.active .item-name { color:#fff; }
-.item-sub { font-size:11px; color:#555; font-family:'Courier New',monospace; letter-spacing:0.5px; max-height:0; overflow:hidden; transition:max-height 0.2s ease, color 0.2s; }
-.menu-item:hover .item-sub, .menu-item.active .item-sub { max-height:20px; color:#888; }
-.arrow { opacity:0; color:#6699ff; font-size:16px; transition:opacity 0.2s, transform 0.2s; transform:translateX(-4px); }
-.menu-item:hover .arrow, .menu-item.active .arrow { opacity:1; transform:translateX(0); }
 
-.hint { margin-top:16px; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; opacity:0.2; font-family:'Courier New',monospace; }
+.icon {
+    width:38px; height:38px; border-radius:10px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0; transition: background 0.2s;
+}
+.menu-item:hover .icon, .menu-item.active .icon { background: rgba(255,255,255,0.1); }
 
-@media (max-width:480px) {
-    body { padding:24px 14px; }
-    .card { padding:14px 16px; gap:12px; }
-    .card-name { font-size:16px; }
-    .menu-item { padding:13px 16px; }
-    /* On mobile subtitles + arrows always visible */
-    .item-sub { max-height:20px !important; color:#666 !important; }
-    .arrow { opacity:0.5 !important; transform:translateX(0) !important; }
+.item-text { display:flex; flex-direction:column; gap:1px; min-width: 0; }
+
+/* Static label — hidden on hover */
+.item-name {
+    font-size: 15px; color: #bbb; font-weight: 500;
+    transition: color 0.2s; display: block;
+}
+/* Title stays visible, just brightens on hover */
+.menu-item:hover .item-name { color: #fff; }
+
+/* typed name span no longer used — hidden */
+.item-name-typed { display: none !important; }
+
+/* Subtitle row — always reserves space, invisible until hovered */
+.item-sub {
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+    min-height: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+}
+
+/* blinking cursor inside subtitle */
+.cursor-block {
+    display: inline-block;
+    width: 6px; height: 11px;
+    background: #00ff9c;
+    margin-left: 1px;
+    vertical-align: middle;
+    animation: blink 0.7s step-end infinite;
+}
+@keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+.arrow {
+    opacity: 0; color: #6699ff; font-size: 16px;
+    transition: opacity 0.2s, transform 0.2s;
+    transform: translateX(-4px); font-family: monospace;
+}
+.menu-item:hover .arrow, .menu-item.active .arrow { opacity: 1; transform: translateX(0); }
+
+/* ── HINT ── */
+.hint { margin-top: 16px; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; opacity: 0.2; font-family: 'Courier New', monospace; }
+
+/* ── SCROLL INDICATOR ── */
+.scroll-indicator {
+    margin-top: 28px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+    transition: opacity 0.4s;
+}
+.scroll-indicator.hidden { opacity: 0 !important; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.scroll-indicator-text { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.18); font-family: 'Courier New', monospace; }
+.chevrons { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.chev {
+    width: 12px; height: 12px;
+    border-right: 1.5px solid rgba(255,255,255,0.2);
+    border-bottom: 1.5px solid rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+}
+.chev:nth-child(1) { animation: chevFade 1.2s ease-in-out 0s infinite; }
+.chev:nth-child(2) { animation: chevFade 1.2s ease-in-out 0.2s infinite; }
+@keyframes chevFade { 0%,100%{opacity:0.15} 50%{opacity:0.55} }
+
+/* ── DIVIDER ── */
+.scroll-divider {
+    width: 100%; max-width: 660px;
+    display: flex; align-items: center; gap: 12px;
+    margin: 44px 0 0;
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.scroll-divider.visible { opacity: 1; transform: translateY(0); }
+.divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+.divider-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.2); font-family: 'Courier New', monospace; white-space: nowrap; }
+
+/* ── STATS GRID ── */
+.stats-grid {
+    width: 100%; max-width: 660px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-top: 8px;
+}
+
+.stat-card {
+    border-radius: 14px; padding: 18px 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative; overflow: hidden;
+    opacity: 0; transform: translateY(22px);
+    transition: opacity 0.5s ease, transform 0.5s ease, background 0.2s, border-color 0.2s;
+}
+.stat-card:nth-child(2) { transition-delay: 0.07s; }
+.stat-card:nth-child(3) { transition-delay: 0.14s; }
+.stat-card:nth-child(4) { transition-delay: 0.21s; }
+.stat-card:nth-child(5) { transition-delay: 0.28s; }
+.stat-card:nth-child(6) { transition-delay: 0.35s; }
+.stat-card.visible { opacity: 1; transform: translateY(0); }
+
+.stat-card:hover { background: rgba(255,255,255,0.055); border-color: rgba(255,255,255,0.1); }
+.stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,156,0.25), transparent);
+    opacity: 0; transition: opacity 0.2s;
+}
+.stat-card:hover::before { opacity: 1; }
+
+.stat-label { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.22); font-family: 'Courier New', monospace; margin-bottom: 8px; }
+.stat-value { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.02em; line-height: 1; }
+.stat-unit { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.28); margin-left: 2px; }
+.stat-sub { font-size: 10px; color: rgba(255,255,255,0.18); font-family: 'Courier New', monospace; margin-top: 5px; letter-spacing: 0.5px; }
+
+.stat-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9px; font-family: 'Courier New', monospace;
+    padding: 2px 8px; border-radius: 4px; margin-top: 7px; letter-spacing: 1px;
+}
+.badge-green  { background: rgba(0,255,156,0.07);  color: #00ff9c; border: 1px solid rgba(0,255,156,0.15); }
+.badge-blue   { background: rgba(56,189,248,0.07); color: #38bdf8; border: 1px solid rgba(56,189,248,0.15); }
+.badge-purple { background: rgba(167,139,250,0.07);color: #a78bfa; border: 1px solid rgba(167,139,250,0.15); }
+
+.stat-card.wide { grid-column: 1 / -1; }
+
+.feature-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.feature-tag {
+    font-size: 10px; font-family: 'Courier New', monospace;
+    padding: 3px 9px; border-radius: 5px; letter-spacing: 0.8px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.38); transition: all 0.15s; cursor: default;
+}
+.feature-tag:hover { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.12); }
+
+.stat-log { font-family: 'Courier New', monospace; font-size: 10.5px; color: rgba(255,255,255,0.3); margin-top: 8px; display: flex; flex-direction: column; gap: 4px; line-height: 1.5; }
+.log-line { display: flex; gap: 10px; }
+.log-time { color: rgba(0,255,156,0.45); flex-shrink: 0; }
+.log-msg  { color: rgba(255,255,255,0.25); flex: 1; }
+.log-ok   { color: rgba(0,255,156,0.65); flex-shrink: 0; }
+
+/* ── MOBILE ── */
+@media (max-width: 480px) {
+    body { padding: 24px 14px 60px; }
+    .card { padding: 14px 16px; gap: 12px; }
+    .card-name { font-size: 16px; }
+    .menu-item { padding: 13px 16px; }
+    .item-sub  { max-height: 20px !important; color: #666 !important; }
+    .arrow     { opacity: 0.5 !important; transform: translateX(0) !important; }
+    .stat-value { font-size: 22px; }
 }
 </style>
 </head>
 <body>
 
+<!-- CARD -->
 <div class="card">
     <div class="avatar-wrap" onclick="document.getElementById('avatarInput').click()" title="Tap to change image">
         <div class="avatar" id="avatarEl">
@@ -140,7 +263,7 @@ body {
 
     <div class="card-info">
         <div class="card-meta">NODE_ID</div>
-        <div class="card-name">Kayo</div>
+        <div class="card-name">Bliss-Bot</div>
         <div class="card-status"><span class="dot"></span>ONLINE</div>
     </div>
     <div class="card-right">
@@ -150,108 +273,294 @@ body {
     <div class="progress-bar"></div>
 </div>
 
+<!-- MENU -->
 <div class="menu">
-    <div class="menu-item" data-href="commands.html">
-        <div class="left"><div class="icon">&gt;_</div><div class="item-text"><span class="item-name">Commands</span><span class="item-sub">Browse all bot commands</span></div></div>
+    <div class="menu-item" data-href="commands.html" data-sub="Browse all bot commands">
+        <div class="left">
+            <div class="icon">&gt;_</div>
+            <div class="item-text">
+                <span class="item-name">Commands</span>
+                <span class="item-sub"></span>
+            </div>
+        </div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" data-href="studio.html">
-        <div class="left"><div class="icon">🎨</div><div class="item-text"><span class="item-name">Studio</span><span class="item-sub">Create &amp; customize</span></div></div>
+
+    <div class="menu-item" data-href="studio.html" data-sub="Create & customize">
+        <div class="left">
+            <div class="icon">🎨</div>
+            <div class="item-text">
+                <span class="item-name">Studio</span>
+                <span class="item-sub"></span>
+            </div>
+        </div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" data-href="dashboard.html">
-        <div class="left"><div class="icon">▦</div><div class="item-text"><span class="item-name">Dashboard</span><span class="item-sub">Manage your server</span></div></div>
+
+    <div class="menu-item" data-href="dashboard.html" data-sub="Manage your server">
+        <div class="left">
+            <div class="icon">▦</div>
+            <div class="item-text">
+                <span class="item-name">Dashboard</span>
+                <span class="item-sub"></span>
+            </div>
+        </div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" data-href="avatars.html">
-        <div class="left"><div class="icon">👥</div><div class="item-text"><span class="item-name">Avatars</span><span class="item-sub">Browse user avatars</span></div></div>
+
+    <div class="menu-item" data-href="avatars.html" data-sub="Browse user avatars">
+        <div class="left">
+            <div class="icon"></div>
+            <div class="item-text">
+                <span class="item-name">Status</span>
+                <span class="item-sub"></span>
+            </div>
+        </div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" data-href="casino.html">
-        <div class="left"><div class="icon">🎰</div><div class="item-text"><span class="item-name">Casino</span><span class="item-sub">Play &amp; earn coins</span></div></div>
+
+    <div class="menu-item" data-href="blissbot-docs.html" data-sub="Read the documentation">
+        <div class="left">
+            <div class="icon">📖</div>
+            <div class="item-text">
+                <span class="item-name">Docs</span>
+                <span class="item-sub"></span>
+            </div>
+        </div>
         <div class="arrow">→</div>
     </div>
-    <div class="menu-item" data-href="docs.html">
-        <div class="left"><div class="icon">📖</div><div class="item-text"><span class="item-name">Docs</span><span class="item-sub">Read the documentation</span></div></div>
-        <div class="arrow">→</div>
-    </div>
-    <div class="menu-item" data-href="purchase.html">
-        <div class="left"><div class="icon">🛒</div><div class="item-text"><span class="item-name">Purchase</span><span class="item-sub">Buy Kayo for your server</span></div></div>
+
+    <div class="menu-item" data-href="purchase.html" data-sub="Buy Bliss-Bot for your server">
+        <div class="left">
+            <div class="icon">🛒</div>
+            <div class="item-text">
+                <span class="item-name">Purchase</span>
+                <span class="item-sub"></span>
+            </div>
+        </div>
         <div class="arrow">→</div>
     </div>
 </div>
 
 <div class="hint" id="hint">Double tap to select</div>
 
+<!-- SCROLL INDICATOR -->
+<div class="scroll-indicator" id="scrollIndicator">
+    <div class="scroll-indicator-text">scroll for stats</div>
+    <div class="chevrons">
+        <div class="chev"></div>
+        <div class="chev"></div>
+    </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="scroll-divider" id="divider">
+    <div class="divider-line"></div>
+    <div class="divider-label">// system_stats</div>
+    <div class="divider-line"></div>
+</div>
+
+<!-- STATS GRID -->
+<div class="stats-grid">
+
+    <div class="stat-card" id="sc0">
+        <div class="stat-label">Servers</div>
+        <div class="stat-value"><span id="serverCount">0</span><span class="stat-unit">+</span></div>
+        <div class="stat-sub">active guilds</div>
+        <div class="stat-badge badge-green">▲ +12 this week</div>
+    </div>
+
+    <div class="stat-card" id="sc1">
+        <div class="stat-label">Users Reached</div>
+        <div class="stat-value"><span id="userCount">0</span><span class="stat-unit">k</span></div>
+        <div class="stat-sub">across all servers</div>
+        <div class="stat-badge badge-blue">◉ live tracking</div>
+    </div>
+
+    <div class="stat-card" id="sc2">
+        <div class="stat-label">Commands Run</div>
+        <div class="stat-value"><span id="cmdCount">0</span><span class="stat-unit">k</span></div>
+        <div class="stat-sub">total executions</div>
+        <div class="stat-badge badge-purple">⚡ today: 1.2k</div>
+    </div>
+
+    <div class="stat-card" id="sc3">
+        <div class="stat-label">Uptime</div>
+        <div class="stat-value">99<span class="stat-unit">.9%</span></div>
+        <div class="stat-sub">30-day average</div>
+        <div class="stat-badge badge-green">● all systems go</div>
+    </div>
+
+    <div class="stat-card wide" id="sc4">
+        <div class="stat-label">Feature Set</div>
+        <div class="feature-list">
+            <span class="feature-tag">antinuke</span>
+            <span class="feature-tag">moderation</span>
+            <span class="feature-tag">tickets</span>
+            <span class="feature-tag">vanity roles</span>
+            <span class="feature-tag">booster roles</span>
+            <span class="feature-tag">voicemaster</span>
+            <span class="feature-tag">levels</span>
+            <span class="feature-tag">giveaways</span>
+            <span class="feature-tag">logging</span>
+            <span class="feature-tag">auto-responders</span>
+            <span class="feature-tag">reaction triggers</span>
+            <span class="feature-tag">embed scripting</span>
+            <span class="feature-tag">aliases</span>
+            <span class="feature-tag">join gate</span>
+            <span class="feature-tag">starboard</span>
+        </div>
+    </div>
+
+    <div class="stat-card wide" id="sc5">
+        <div class="stat-label">Recent Activity</div>
+        <div class="stat-log">
+            <div class="log-line"><span class="log-time">00:00:01</span><span class="log-msg">shard 0 connected</span><span class="log-ok">✓</span></div>
+            <div class="log-line"><span class="log-time">00:00:03</span><span class="log-msg">database pool ready (8/8)</span><span class="log-ok">✓</span></div>
+            <div class="log-line"><span class="log-time">00:01:12</span><span class="log-msg">antinuke: flagged mass-ban attempt</span><span class="log-ok">blocked</span></div>
+            <div class="log-line"><span class="log-time">00:04:38</span><span class="log-msg">ticket opened in guild #48821</span><span class="log-ok">✓</span></div>
+            <div class="log-line"><span class="log-time">00:07:55</span><span class="log-msg">giveaway ended — winner selected</span><span class="log-ok">✓</span></div>
+            <div class="log-line"><span class="log-time">00:09:11</span><span class="log-msg">booster role updated by user</span><span class="log-ok">✓</span></div>
+        </div>
+    </div>
+
+</div>
+
 <script>
-// Avatar picker
+/* ── AVATAR ── */
 document.getElementById('avatarInput').addEventListener('change', function() {
     const file = this.files[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    document.getElementById('avatarEl').innerHTML = '<img src="' + url + '" alt="avatar">';
+    document.getElementById('avatarEl').innerHTML = '<img src="' + URL.createObjectURL(file) + '" alt="avatar">';
 });
 
-const items = Array.from(document.querySelectorAll('.menu-item'));
-const hint = document.getElementById('hint');
-let selected = -1; // nothing selected by default
+/* ── TERMINAL TYPING (subtitle) ── */
+const SPEED = 38;
+const timers = new Map();
 
-function isMobile() {
-    return window.matchMedia('(max-width:480px)').matches || ('ontouchstart' in window);
+function startTyping(item) {
+    const label = item.dataset.sub || '';
+    const subEl = item.querySelector('.item-sub');
+    if (!subEl) return;
+    if (timers.has(item)) { clearTimeout(timers.get(item)); timers.delete(item); }
+    subEl.innerHTML = '';
+    let i = 0;
+    function tick() {
+        if (i <= label.length) {
+            // text + blinking cursor
+            subEl.innerHTML = '<span style="color:#00ff9c">' + label.slice(0, i) + '</span>'
+                + '<span class="cursor-block"></span>';
+            i++;
+            timers.set(item, setTimeout(tick, SPEED));
+        } else {
+            // done — drop cursor, leave green text
+            subEl.innerHTML = '<span style="color:#00ff9c">' + label + '</span>';
+            timers.delete(item);
+        }
+    }
+    tick();
 }
 
-function setSelected(idx) {
-    items.forEach((el, i) => el.classList.toggle('active', i === idx));
-    selected = idx;
+function stopTyping(item) {
+    if (timers.has(item)) { clearTimeout(timers.get(item)); timers.delete(item); }
+    const subEl = item.querySelector('.item-sub');
+    if (subEl) subEl.innerHTML = '';
 }
 
+/* ── MENU LOGIC ── */
+const items    = Array.from(document.querySelectorAll('.menu-item'));
+const hintEl   = document.getElementById('hint');
+let selected   = -1;
+
+const isMobile = () => window.matchMedia('(max-width:480px)').matches || ('ontouchstart' in window);
+
+function setSelected(i) {
+    items.forEach((el, j) => el.classList.toggle('active', j === i));
+    selected = i;
+}
 function clearSelected() {
     items.forEach(el => el.classList.remove('active'));
     selected = -1;
 }
 
-// Desktop: hover moves selection, click navigates
 if (!isMobile()) {
     items.forEach((item, i) => {
-        item.addEventListener('mouseenter', () => setSelected(i));
-        item.addEventListener('mouseleave', () => clearSelected());
-        item.addEventListener('click', () => {
-            window.location.href = item.dataset.href;
-        });
+        item.addEventListener('mouseenter', () => { setSelected(i); startTyping(item); });
+        item.addEventListener('mouseleave', () => { clearSelected(); stopTyping(item); });
+        item.addEventListener('click', () => { window.location.href = item.dataset.href; });
     });
 } else {
-    // Mobile: 1st tap = select (show desc), 2nd tap on same item = navigate
-    hint.textContent = 'Tap once to preview · Tap again to open';
+    hintEl.textContent = 'Tap once to preview · Tap again to open';
     items.forEach((item, i) => {
         item.addEventListener('click', () => {
-            if (selected === i) {
-                // already selected — go
-                window.location.href = item.dataset.href;
-            } else {
-                // first tap — just select
-                setSelected(i);
-            }
+            if (selected === i) { window.location.href = item.dataset.href; return; }
+            if (selected >= 0) stopTyping(items[selected]);
+            setSelected(i); startTyping(item);
         });
     });
-
-    // Tap outside clears selection
     document.addEventListener('click', e => {
-        if (!e.target.closest('.menu-item')) clearSelected();
+        if (!e.target.closest('.menu-item')) { if (selected >= 0) stopTyping(items[selected]); clearSelected(); }
     });
 }
 
-// Keyboard nav (works on both)
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowDown') {
-        const next = selected < items.length - 1 ? selected + 1 : 0;
-        setSelected(next);
+        if (selected >= 0) stopTyping(items[selected]);
+        const n = selected < items.length - 1 ? selected + 1 : 0;
+        setSelected(n); startTyping(items[n]);
     } else if (e.key === 'ArrowUp') {
-        const prev = selected > 0 ? selected - 1 : items.length - 1;
-        setSelected(prev);
+        if (selected >= 0) stopTyping(items[selected]);
+        const n = selected > 0 ? selected - 1 : items.length - 1;
+        setSelected(n); startTyping(items[n]);
     } else if (e.key === 'Enter' && selected >= 0) {
         window.location.href = items[selected].dataset.href;
     }
 });
+
+/* ── SCROLL INDICATOR ── */
+const scrollInd = document.getElementById('scrollIndicator');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) scrollInd.classList.add('hidden');
+    else scrollInd.classList.remove('hidden');
+}, { passive: true });
+
+/* ── SCROLL REVEAL ── */
+const revealTargets = [
+    document.getElementById('divider'),
+    ...document.querySelectorAll('.stat-card')
+];
+const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+revealTargets.forEach(el => revealObs.observe(el));
+
+/* ── COUNTERS ── */
+function animCount(spanId, target, duration) {
+    const el = document.getElementById(spanId);
+    let start = null;
+    function step(ts) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.floor(ease * target);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+}
+
+let counted = false;
+const countObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting && !counted) {
+            counted = true;
+            animCount('serverCount', 340, 1400);
+            animCount('userCount',   124, 1600);
+            animCount('cmdCount',    890, 1800);
+        }
+    });
+}, { threshold: 0.3 });
+countObs.observe(document.getElementById('sc0'));
 </script>
 </body>
 </html>
