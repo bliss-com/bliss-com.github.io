@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bliss-Bot</title>
+<link rel="icon" type="image/png" href="./GOPR1739-EDIT-2_edited-2.png">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 
@@ -41,7 +42,8 @@ body {
     display: flex; align-items: center; justify-content: center;
     overflow: hidden; transition: box-shadow 0.2s;
 }
-.avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+.avatar img { width:100%; height:100%; object-fit:cover; display:block; 
+}
 .avatar svg { width:36px; height:36px; opacity:0.85; }
 .avatar-overlay {
     position: absolute; inset: 0; border-radius: 12px;
@@ -53,19 +55,54 @@ body {
 .avatar-wrap:active .avatar-overlay { opacity: 1; }
 #avatarInput { display: none; }
 
-.card-info { flex:1; min-width:0; }
-.card-meta { font-size:9px; letter-spacing:2px; opacity:0.35; text-transform:uppercase; margin-bottom:2px; font-family:'Courier New',monospace; }
-.card-name { font-size:18px; font-weight:600; color:#fff; letter-spacing:-0.01em; }
-.card-status { display:flex; align-items:center; gap:6px; margin-top:3px; font-size:11px; color:#00ff9c; font-family:'Courier New',monospace; letter-spacing:1px; }
-.dot { width:6px; height:6px; border-radius:50%; background:#00ff9c; box-shadow:0 0 6px #00ff9c; animation:pulse 2s infinite; }
+.card-info { 
+     flex:1;
+     min-width:0; }
+.card-meta { 
+    font-size:9px;
+     letter-spacing:2px; opacity:0.35;
+      text-transform:uppercase;
+       margin-bottom:2px;
+        font-family:'Courier New',monospace; 
+    }
+.card-name { font-size:18px;
+     font-weight:600; color:#fff;
+      letter-spacing:-0.01em; }
+.card-status { display:flex;
+     align-items:center; gap:6px; margin-top:3px;
+      font-size:11px; color:#00ff9c;
+       font-family:'Courier New',monospace;
+        letter-spacing:1px; }
+.dot { 
+     width:6px; height:6px;
+     border-radius:50%; background:#00ff9c;
+      box-shadow:0 0 6px #00ff9c; animation:pulse 2s infinite;
+     }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-.card-right { text-align:right; flex-shrink:0; }
-.card-addr { font-size:9px; font-family:'Courier New',monospace; opacity:0.3; letter-spacing:1px; margin-bottom:4px; }
-.card-uptime { font-size:13px; color:#00ff9c; font-family:'Courier New',monospace; font-weight:600; }
-.progress-bar { position:absolute; bottom:0; left:0; height:2px; width:99.9%; background:linear-gradient(90deg,#00ff9c11,#00ff9c66,#00ff9c11); border-radius:0 0 18px 18px; }
+.card-right { 
+    text-align:right;
+     flex-shrink:0; }
+.card-addr { 
+    font-size:9px;
+     font-family:'Courier New',monospace; opacity:0.3;
+      letter-spacing:1px;
+       margin-bottom:4px; }
+.card-uptime { font-size:13px;
+     color:#00ff9c; font-family:'Courier New',monospace;
+      font-weight:600; 
+    }
+.progress-bar { position:absolute; bottom:0;
+     left:0; height:2px;
+      width:99.9%;
+       background:linear-gradient(90deg,#00ff9c11,#00ff9c66,#00ff9c11);
+        border-radius:0 0 18px 18px; 
+    }
 
 /* ── MENU ── */
-.menu { display:flex; flex-direction:column; gap:4px; width:100%; max-width:660px; }
+.menu { display:flex;
+     flex-direction:column;
+     gap:4px; width:100%; max-width:660px;
+     }
 
 .menu-item {
     padding: 14px 20px; border-radius: 14px;
@@ -88,17 +125,16 @@ body {
     display: flex; align-items: center; justify-content: center;
     font-size: 16px; flex-shrink: 0; transition: background 0.2s;
 }
-.menu-item:hover .icon, .menu-item.active .icon { background: rgba(255,255,255,0.1); }
+.menu-item:hover .icon, .menu-item.active .icon { 
+    background: rgba(255,255,255,0.1);
+ }
 
-.item-text { display:flex; flex-direction:column; gap:1px; min-width: 0; }
+/* item-text handled below with hover lift */
 
-/* Static label — hidden on hover */
 .item-name {
     font-size: 15px; color: #bbb; font-weight: 500;
-    transition: color 0.2s; display: block;
+    transition: color 0.2s, text-shadow 0.2s; display: block;
 }
-/* Title stays visible, just brightens on hover */
-.menu-item:hover .item-name { color: #fff; }
 
 /* typed name span no longer used — hidden */
 .item-name-typed { display: none !important; }
@@ -118,7 +154,7 @@ body {
 .cursor-block {
     display: inline-block;
     width: 6px; height: 11px;
-    background: #00ff9c;
+    background: #9ca3af;
     margin-left: 1px;
     vertical-align: middle;
     animation: blink 0.7s step-end infinite;
@@ -133,22 +169,32 @@ body {
 .menu-item:hover .arrow, .menu-item.active .arrow { opacity: 1; transform: translateX(0); }
 
 /* ── HINT ── */
-.hint { margin-top: 16px; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; opacity: 0.2; font-family: 'Courier New', monospace; }
+.hint { margin-top: 16px; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+     opacity: 0.2; font-family: 'Courier New', monospace; 
+    }
 
 /* ── SCROLL INDICATOR ── */
 .scroll-indicator {
     margin-top: 28px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 8px;
     opacity: 0;
     animation: fadeUp 0.8s ease 1s forwards;
     transition: opacity 0.4s;
 }
 .scroll-indicator.hidden { opacity: 0 !important; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-.scroll-indicator-text { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.18); font-family: 'Courier New', monospace; }
-.chevrons { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.scroll-indicator-text { font-size: 9px;
+     letter-spacing: 2.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.18); font-family: 'Courier New', monospace; }
+.chevrons { display: flex;
+     flex-direction: column; align-items: center;
+      gap: 2px; }
 .chev {
-    width: 12px; height: 12px;
+    width: 12px;
+     height: 12px;
     border-right: 1.5px solid rgba(255,255,255,0.2);
     border-bottom: 1.5px solid rgba(255,255,255,0.2);
     transform: rotate(45deg);
@@ -230,15 +276,85 @@ body {
 .log-msg  { color: rgba(255,255,255,0.25); flex: 1; }
 .log-ok   { color: rgba(0,255,156,0.65); flex-shrink: 0; }
 
-/* ── MOBILE ── */
+/* ── ITEM TEXT LIFT ON HOVER ── */
+.item-text {
+    display: flex; flex-direction: column; gap: 1px; min-width: 0;
+    transform: translateY(0);
+    transition: transform 0.22s ease;
+}
+.menu-item:hover .item-text,
+.menu-item.active .item-text { transform: translateY(-3px); }
+
+/* Brighter title on hover */
+.menu-item:hover .item-name,
+.menu-item.active .item-name { color: #ffffff; text-shadow: 0 0 14px rgba(255,255,255,0.22); }
+
+/* ── STATS SPACER — push stats well below the fold ── */
+.stats-spacer {
+    width: 100%; max-width: 660px;
+    height: 60vh;
+    min-height: 220px;
+    max-height: 420px;
+    flex-shrink: 0;
+}
+
+/* ── MOBILE — iOS, Android, Redmi, Huawei, Samsung ── */
+
+/* Base small phone (≤ 480px) */
 @media (max-width: 480px) {
-    body { padding: 24px 14px 60px; }
-    .card { padding: 14px 16px; gap: 12px; }
+    body { padding: 20px 12px 80px; -webkit-text-size-adjust: 100%; }
+    .card { padding: 13px 14px; gap: 11px; border-radius: 14px; }
     .card-name { font-size: 16px; }
-    .menu-item { padding: 13px 16px; }
-    .item-sub  { max-height: 20px !important; color: #666 !important; }
-    .arrow     { opacity: 0.5 !important; transform: translateX(0) !important; }
+    .avatar { width: 50px; height: 50px; border-radius: 10px; }
+    .avatar-wrap { width: 50px; height: 50px; }
+    .menu { gap: 3px; }
+    .menu-item { padding: 13px 14px; border-radius: 12px; }
+    .item-text { transform: none !important; transition: none; }
+    .item-name { font-size: 14px; color: #ddd; }
+    .item-sub { min-height: 0; }
+    .icon { width: 34px; height: 34px; font-size: 15px; border-radius: 9px; }
+    .arrow { opacity: 0.4 !important; transform: translateX(0) !important; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .stat-card { padding: 14px 14px; border-radius: 12px; }
     .stat-value { font-size: 22px; }
+    .stat-label { font-size: 8px; }
+    .stats-spacer { height: 40vh; min-height: 160px; max-height: 280px; }
+    .scroll-indicator { margin-top: 20px; }
+    .hint { font-size: 9px; }
+}
+
+/* Mid-range Android / Redmi / Huawei (481–640px) */
+@media (min-width: 481px) and (max-width: 640px) {
+    body { padding: 28px 16px 80px; }
+    .card { padding: 14px 16px; gap: 13px; }
+    .menu-item { padding: 13px 16px; }
+    .item-name { font-size: 14.5px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat-value { font-size: 24px; }
+    .stats-spacer { height: 50vh; min-height: 180px; }
+}
+
+/* Samsung Galaxy, larger Androids (641–768px) */
+@media (min-width: 641px) and (max-width: 768px) {
+    body { padding: 32px 20px 80px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat-value { font-size: 26px; }
+}
+
+/* Touch-device global fixes (iOS Safari, Android Chrome) */
+@media (hover: none) and (pointer: coarse) {
+    .menu-item:hover { background: transparent; border-color: transparent; }
+    .menu-item:hover .item-text { transform: none; }
+    .menu-item:hover .item-name { color: #bbb; text-shadow: none; }
+    .menu-item:hover .icon { background: rgba(255,255,255,0.05); }
+    .menu-item:hover .arrow { opacity: 0; }
+    .menu-item.active { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.1); }
+    .menu-item.active .item-name { color: #fff; }
+    .menu-item.active .arrow { opacity: 0.6; transform: translateX(0); }
+    .menu-item { min-height: 52px; }
+    .avatar-wrap { min-height: 56px; min-width: 56px; }
+    body { -webkit-overflow-scrolling: touch; }
+    * { -webkit-tap-highlight-color: transparent; }
 }
 </style>
 </head>
@@ -308,9 +424,9 @@ body {
         <div class="arrow">→</div>
     </div>
 
-    <div class="menu-item" data-href="avatars.html" data-sub="Check Out Stats">
+    <div class="menu-item" data-href="avatars.html" data-sub="Browse user avatars">
         <div class="left">
-            <div class="icon">👥</div>
+            <div class="icon"></div>
             <div class="item-text">
                 <span class="item-name">Status</span>
                 <span class="item-sub"></span>
@@ -352,6 +468,9 @@ body {
         <div class="chev"></div>
     </div>
 </div>
+
+<!-- STATS SPACER -->
+<div class="stats-spacer"></div>
 
 <!-- DIVIDER -->
 <div class="scroll-divider" id="divider">
@@ -448,13 +567,13 @@ function startTyping(item) {
     function tick() {
         if (i <= label.length) {
             // text + blinking cursor
-            subEl.innerHTML = '<span style="color:#00ff9c">' + label.slice(0, i) + '</span>'
+            subEl.innerHTML = '<span style="color:#9ca3af">' + label.slice(0, i) + '</span>'
                 + '<span class="cursor-block"></span>';
             i++;
             timers.set(item, setTimeout(tick, SPEED));
         } else {
             // done — drop cursor, leave green text
-            subEl.innerHTML = '<span style="color:#00ff9c">' + label + '</span>';
+            subEl.innerHTML = '<span style="color:#9ca3af">' + label + '</span>';
             timers.delete(item);
         }
     }
